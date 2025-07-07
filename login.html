@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Gas CRN Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+        }
+        .login-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-container h1 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .login-container p {
+            margin-bottom: 30px;
+            color: #6c757d;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #495057;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #00796B;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-btn:hover {
+            background-color: #004d40;
+        }
+        .error-message {
+            color: #D32F2F;
+            margin-top: 15px;
+            font-weight: 500;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Admin Login</h1>
+        <p>Please sign in to access the dashboard.</p>
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="you@example.com" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <button id="login-btn" class="login-btn">Sign In</button>
+        <p id="error-message" class="error-message"></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const firebaseConfig = {
+            apiKey: "AIzaSyAWZZOTIsRNi7rrgw5rkOVkkxhx_72FV-4",
+            authDomain: "sapasbuilt.firebaseapp.com",
+            databaseURL: "https://sapasbuilt-default-rtdb.firebaseio.com",
+            projectId: "sapasbuilt",
+            storageBucket: "sapasbuilt.firebasestorage.app",
+            messagingSenderId: "383977417952",
+            appId: "1:383977417952:web:68149d5aa3149520bfd68c",
+            measurementId: "G-YZ2LY4MFW1"
+        };
+
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+
+            const loginButton = document.getElementById('login-btn');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('error-message');
+
+            loginButton.addEventListener('click', () => {
+                const email = emailInput.value;
+                const password = passwordInput.value;
+                
+                errorMessage.style.display = 'none';
+
+                if (!email || !password) {
+                    errorMessage.textContent = 'Please enter both email and password.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Signed in successfully
+                        console.log('Login successful, redirecting to dashboard...');
+                        // Redirect to the dashboard folder
+                        window.location.href = './Dashboard/';
+                    })
+                    .catch((error) => {
+                        // Handle Errors here.
+                        console.error('Login failed:', error);
+                        errorMessage.textContent = 'Login failed. Please check your credentials.';
+                        errorMessage.style.display = 'block';
+                    });
+            });
+        });
+    </script>
+
+</body>
+</html>
